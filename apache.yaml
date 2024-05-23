@@ -1,0 +1,22 @@
+
+- hosts: all
+  become: yes
+  tasks:
+  - name: Print all available facts
+    ansible.builtin.debug:
+      var: ansible_facts
+
+  - name: install apache
+    ansible.builtin.apt:
+      name: apache2
+      state: present
+      update_cache: yes
+    when: ansible_facts['os_family'] == "Debian"
+
+  - name: Ensure the default Apache port is 80
+    ansible.builtin.lineinfile:
+      path: /var/www/html/index.html
+      create: yes
+      line: 'THIS IS VIJAY'
+      owner: root
+      mode: '777'
